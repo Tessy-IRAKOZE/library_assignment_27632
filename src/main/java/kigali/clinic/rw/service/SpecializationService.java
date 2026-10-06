@@ -20,6 +20,10 @@ public class SpecializationService {
     @Autowired
     private DoctorRepository doctorRepo;
 
+    public List<Specialization> findUnusedSpecializations() {
+        return specializationRepo.findUnusedSpecializations();
+    }
+
     public String saveSpecialization(Specialization specialization) {
         specializationRepo.save(specialization);
         return "Specialization saved successfully";

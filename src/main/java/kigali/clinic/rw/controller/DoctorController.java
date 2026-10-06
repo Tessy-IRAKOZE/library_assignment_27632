@@ -17,6 +17,16 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
+    @GetMapping(value = "/without-office")
+    public ResponseEntity<List<Doctor>> findDoctorsWithoutOffice() {
+        return new ResponseEntity<>(doctorService.findDoctorsWithoutOffice(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/by-specialization")
+    public ResponseEntity<List<Doctor>> findBySpecializationName(@RequestParam String name) {
+        return new ResponseEntity<>(doctorService.findBySpecializationName(name), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/save")
     public ResponseEntity<?> saveDoctor(@RequestBody Doctor doctor) {
         String message = doctorService.saveDoctor(doctor);

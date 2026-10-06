@@ -14,6 +14,14 @@ public class DoctorService {
     @Autowired
     private DoctorRepository doctorRepo;
 
+    public List<Doctor> findBySpecializationName(String name) {
+        return doctorRepo.findBySpecializationName(name);
+    }
+
+    public List<Doctor> findDoctorsWithoutOffice() {
+        return doctorRepo.findDoctorsWithoutOffice();
+    }
+
     public String saveDoctor(Doctor doctor) {
         doctorRepo.save(doctor);
         return "Doctor saved successfully";

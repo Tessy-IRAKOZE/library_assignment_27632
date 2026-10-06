@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kigali.clinic.rw.domain.Patient;
+import kigali.clinic.rw.repository.DoctorRepository;
 import kigali.clinic.rw.repository.PatientRepository;
 
 @Service
@@ -14,8 +15,18 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepo;
 
+    @Autowired
+    private DoctorRepository doctorRepo;
+
     public List<Patient> findByLastNameIgnoreCase(String lastName) {
         return patientRepo.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+    }
+
+    public List<Patient> findPatientsByDoctorId(UUID doctorId) {
+        if (!doctorRepo.existsById(doctorId)) {
+            return null;
+        }
+        return patientRepo.findPatientsByDoctorId(doctorId);
     }
 
     public String savePatient(Patient patient) {

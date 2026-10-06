@@ -17,6 +17,11 @@ public class SpecializationController {
     @Autowired
     private SpecializationService specializationService;
 
+    @GetMapping(value = "/unused")
+    public ResponseEntity<List<Specialization>> findUnusedSpecializations() {
+        return new ResponseEntity<>(specializationService.findUnusedSpecializations(), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/save")
     public ResponseEntity<?> saveSpecialization(@RequestBody Specialization specialization) {
         String message = specializationService.saveSpecialization(specialization);

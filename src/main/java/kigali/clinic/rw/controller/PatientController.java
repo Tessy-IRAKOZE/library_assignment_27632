@@ -17,6 +17,15 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
+    @GetMapping(value = "/of-doctor/{doctorId}")
+    public ResponseEntity<?> findPatientsByDoctorId(@PathVariable UUID doctorId) {
+        List<Patient> patients = patientService.findPatientsByDoctorId(doctorId);
+        if (patients == null) {
+            return new ResponseEntity<>("The doctor with that id does not exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(patients, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/by-last-name")
     public ResponseEntity<List<Patient>> findByLastName(@RequestParam String lastName) {
         return new ResponseEntity<>(patientService.findByLastNameIgnoreCase(lastName), HttpStatus.OK);
