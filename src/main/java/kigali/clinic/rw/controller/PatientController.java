@@ -31,6 +31,11 @@ public class PatientController {
         return new ResponseEntity<>(patientService.findByLastNameIgnoreCase(lastName), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/frequent")
+    public ResponseEntity<List<Patient>> findFrequentPatients(@RequestParam int min) {
+        return new ResponseEntity<>(patientService.findFrequentPatients(min), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/save")
     public ResponseEntity<?> savePatient(@RequestBody Patient patient) {
         String message = patientService.savePatient(patient);

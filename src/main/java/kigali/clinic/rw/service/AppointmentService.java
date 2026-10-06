@@ -68,6 +68,20 @@ public class AppointmentService {
         return appointmentRepo.countAppointmentsPerDoctor();
     }
 
+    public List<Object[]> countAppointmentsByStatus() {
+        return appointmentRepo.countAppointmentsByStatus();
+    }
+
+    public String cancelAppointmentsForDoctorOnDate(UUID doctorId, LocalDate date) {
+        int count = appointmentRepo.cancelAppointmentsForDoctorOnDate(
+            doctorId,
+            date,
+            AppointmentStatus.CANCELLED,
+            AppointmentStatus.COMPLETED
+        );
+        return count + " appointments cancelled";
+    }
+
     public List<Appointment> findAppointmentsBySpecialization(UUID specializationId) {
         return appointmentRepo.findAppointmentsBySpecialization(specializationId);
     }

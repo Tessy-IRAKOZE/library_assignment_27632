@@ -79,6 +79,18 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentService.countAppointmentsPerDoctor(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/stats/by-status")
+    public ResponseEntity<List<Object[]>> countAppointmentsByStatus() {
+        return new ResponseEntity<>(appointmentService.countAppointmentsByStatus(), HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/cancel-day")
+    public ResponseEntity<?> cancelAppointmentsForDoctorOnDate(@RequestParam UUID doctorId, @RequestParam String date) {
+        LocalDate appointmentDate = LocalDate.parse(date);
+        String message = appointmentService.cancelAppointmentsForDoctorOnDate(doctorId, appointmentDate);
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/specialization/{specializationId}")
     public ResponseEntity<List<Appointment>> findBySpecialization(@PathVariable UUID specializationId) {
         return new ResponseEntity<>(appointmentService.findAppointmentsBySpecialization(specializationId), HttpStatus.OK);

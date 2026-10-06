@@ -27,6 +27,10 @@ public class OfficeService {
         return offRepo.findAll();
     }
 
+    public List<Object[]> findBusiestOffice() {
+        return offRepo.findBusiestOffice();
+    }
+
     public Optional<Office> findById(UUID id) {
         return offRepo.findById(id);
     }

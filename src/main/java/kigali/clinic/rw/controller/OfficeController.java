@@ -27,6 +27,15 @@ public class OfficeController {
         }
     }
 
+    @GetMapping(value = "/busiest")
+    public ResponseEntity<?> findBusiestOffice() {
+        List<Object[]> result = offServe.findBusiestOffice();
+        if (result.isEmpty()) {
+            return new ResponseEntity<>("No appointments yet", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result.get(0), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/all")
     public ResponseEntity<List<Office>> findAll() {
         return new ResponseEntity<>(offServe.findAll(), HttpStatus.OK);

@@ -29,6 +29,10 @@ public class PatientService {
         return patientRepo.findPatientsByDoctorId(doctorId);
     }
 
+    public List<Patient> findFrequentPatients(int min) {
+        return patientRepo.findFrequentPatients(min);
+    }
+
     public String savePatient(Patient patient) {
         patientRepo.save(patient);
         return "Patient saved successfully";
