@@ -90,6 +90,18 @@ public class AppointmentService {
         return appointmentRepo.findByDoctorIdOrderByAppointmentDateAsc(doctorId, PageRequest.of(page, size, Sort.by("appointmentDate").ascending()));
     }
 
+    public Page<Appointment> findAppointmentsPage(int page, int size, String sortBy, String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        return appointmentRepo.findAll(PageRequest.of(page, size, sort));
+    }
+
+    public String deleteCancelledBefore(LocalDate date) {
+        int count = appointmentRepo.deleteCancelledBefore(AppointmentStatus.CANCELLED, date);
+        return count + " appointments deleted";
+    }
+
     public String updateAppointment(UUID id, Appointment updatedAppointment) {
         Optional<Appointment> existing = appointmentRepo.findById(id);
         if (existing.isEmpty()) {

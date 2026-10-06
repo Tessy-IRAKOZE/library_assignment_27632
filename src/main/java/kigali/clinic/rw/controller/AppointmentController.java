@@ -104,6 +104,23 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentService.findDoctorAppointmentsPaginated(doctorId, page, size), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/page")
+    public ResponseEntity<Page<Appointment>> findAppointmentsPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "appointmentDate,desc") String sort) {
+        String[] sortParts = sort.split(",");
+        String sortBy = sortParts[0];
+        String direction = sortParts.length > 1 ? sortParts[1] : "asc";
+        return new ResponseEntity<>(appointmentService.findAppointmentsPage(page, size, sortBy, direction), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/cancelled-before")
+    public ResponseEntity<?> deleteCancelledBefore(@RequestParam String date) {
+        String message = appointmentService.deleteCancelledBefore(LocalDate.parse(date));
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable UUID id, @RequestBody Appointment appointment) {
         String message = appointmentService.updateAppointment(id, appointment);
