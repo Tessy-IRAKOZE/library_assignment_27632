@@ -10,7 +10,6 @@ import kigali.clinic.rw.domain.Doctor;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
-
     List<Doctor> findByFirstName(String firstName);
     List<Doctor> findByLastName(String lastName);
     Optional<Doctor> findByOfficeId(UUID officeId);

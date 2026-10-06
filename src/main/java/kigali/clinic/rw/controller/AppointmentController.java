@@ -53,37 +53,30 @@ public class AppointmentController {
             return new ResponseEntity<>("Appointment not found", HttpStatus.NOT_FOUND);
         }
     }
-
     @GetMapping(value = "/doctor/{doctorId}")
     public ResponseEntity<List<Appointment>> findByDoctorId(@PathVariable UUID doctorId) {
         return new ResponseEntity<>(appointmentService.findByDoctorId(doctorId), HttpStatus.OK);
     }
-
     @GetMapping(value = "/patient/{patientId}")
     public ResponseEntity<List<Appointment>> findByPatientId(@PathVariable UUID patientId) {
         return new ResponseEntity<>(appointmentService.findByPatientId(patientId), HttpStatus.OK);
     }
-
     @GetMapping(value = "/doctor/{doctorId}/pending")
     public ResponseEntity<List<Appointment>> findPendingByDoctor(@PathVariable UUID doctorId) {
         return new ResponseEntity<>(appointmentService.findPendingByDoctorOrderByDate(doctorId), HttpStatus.OK);
     }
-
     @GetMapping(value = "/pending/past")
     public ResponseEntity<List<Appointment>> findPendingPastAppointments() {
         return new ResponseEntity<>(appointmentService.findPendingAppointmentsBeforeDate(), HttpStatus.OK);
     }
-
     @GetMapping(value = "/count-per-doctor")
     public ResponseEntity<List<Object[]>> countAppointmentsPerDoctor() {
         return new ResponseEntity<>(appointmentService.countAppointmentsPerDoctor(), HttpStatus.OK);
     }
-
     @GetMapping(value = "/stats/by-status")
     public ResponseEntity<List<Object[]>> countAppointmentsByStatus() {
         return new ResponseEntity<>(appointmentService.countAppointmentsByStatus(), HttpStatus.OK);
     }
-
     @PatchMapping(value = "/cancel-day")
     public ResponseEntity<?> cancelAppointmentsForDoctorOnDate(@RequestParam UUID doctorId, @RequestParam String date) {
         LocalDate appointmentDate = LocalDate.parse(date);

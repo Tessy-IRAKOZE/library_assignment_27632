@@ -26,7 +26,6 @@ public class AppointmentService {
     public List<Appointment> findBetweenDates(LocalDate start, LocalDate end) {
         return appointmentRepo.findByAppointmentDateBetweenOrderByAppointmentDateAsc(start, end);
     }
-
     public String saveAppointment(Appointment appointment) {
         boolean isBooked = appointmentRepo.existsByDoctorIdAndAppointmentDateAndStatusNot(
             appointment.getDoctor().getId(),
@@ -39,39 +38,30 @@ public class AppointmentService {
         appointmentRepo.save(appointment);
         return "Appointment saved successfully";
     }
-
     public List<Appointment> findAll() {
         return appointmentRepo.findAll();
     }
-
     public Optional<Appointment> findById(UUID id) {
         return appointmentRepo.findById(id);
     }
-
     public List<Appointment> findByDoctorId(UUID doctorId) {
         return appointmentRepo.findByDoctorId(doctorId);
     }
-
     public List<Appointment> findByPatientId(UUID patientId) {
         return appointmentRepo.findByPatientId(patientId);
     }
-
     public List<Appointment> findPendingByDoctorOrderByDate(UUID doctorId) {
         return appointmentRepo.findByDoctorIdAndStatusOrderByAppointmentDateAsc(doctorId, AppointmentStatus.PENDING);
     }
-
     public List<Appointment> findPendingAppointmentsBeforeDate() {
         return appointmentRepo.findPendingAppointmentsBeforeDate(LocalDate.now());
     }
-
     public List<Object[]> countAppointmentsPerDoctor() {
         return appointmentRepo.countAppointmentsPerDoctor();
     }
-
     public List<Object[]> countAppointmentsByStatus() {
         return appointmentRepo.countAppointmentsByStatus();
     }
-
     public String cancelAppointmentsForDoctorOnDate(UUID doctorId, LocalDate date) {
         int count = appointmentRepo.cancelAppointmentsForDoctorOnDate(
             doctorId,
@@ -81,27 +71,22 @@ public class AppointmentService {
         );
         return count + " appointments cancelled";
     }
-
     public List<Appointment> findAppointmentsBySpecialization(UUID specializationId) {
         return appointmentRepo.findAppointmentsBySpecialization(specializationId);
     }
-
     public Page<Appointment> findDoctorAppointmentsPaginated(UUID doctorId, int page, int size) {
         return appointmentRepo.findByDoctorIdOrderByAppointmentDateAsc(doctorId, PageRequest.of(page, size, Sort.by("appointmentDate").ascending()));
     }
-
     public Page<Appointment> findAppointmentsPage(int page, int size, String sortBy, String direction) {
         Sort sort = direction.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
         return appointmentRepo.findAll(PageRequest.of(page, size, sort));
     }
-
     public String deleteCancelledBefore(LocalDate date) {
         int count = appointmentRepo.deleteCancelledBefore(AppointmentStatus.CANCELLED, date);
         return count + " appointments deleted";
     }
-
     public String updateAppointment(UUID id, Appointment updatedAppointment) {
         Optional<Appointment> existing = appointmentRepo.findById(id);
         if (existing.isEmpty()) {
@@ -116,7 +101,6 @@ public class AppointmentService {
         appointmentRepo.save(appointment);
         return "Appointment updated successfully";
     }
-
     public String deleteAppointment(UUID id) {
         if (!appointmentRepo.existsById(id)) {
             return "Appointment not found";
