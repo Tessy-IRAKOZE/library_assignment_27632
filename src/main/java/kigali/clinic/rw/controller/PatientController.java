@@ -1,0 +1,65 @@
+package kigali.clinic.rw.controller;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import kigali.clinic.rw.domain.Patient;
+import kigali.clinic.rw.service.PatientService;
+
+@RestController
+@RequestMapping(value = "/api/patient")
+public class PatientController {
+
+    @Autowired
+    private PatientService patientService;
+
+    @GetMapping(value = "/by-last-name")
+    public ResponseEntity<List<Patient>> findByLastName(@RequestParam String lastName) {
+        return new ResponseEntity<>(patientService.findByLastNameIgnoreCase(lastName), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/save")
+    public ResponseEntity<?> savePatient(@RequestBody Patient patient) {
+        String message = patientService.savePatient(patient);
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<Patient>> findAll() {
+        return new ResponseEntity<>(patientService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> findById(@PathVariable UUID id) {
+        Optional<Patient> patient = patientService.findById(id);
+        if (patient.isPresent()) {
+            return new ResponseEntity<>(patient.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Patient not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<?> updatePatient(@PathVariable UUID id, @RequestBody Patient patient) {
+        String message = patientService.updatePatient(id, patient);
+        if (message.equals("Patient updated successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<?> deletePatient(@PathVariable UUID id) {
+        String message = patientService.deletePatient(id);
+        if (message.equals("Patient deleted successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+}
