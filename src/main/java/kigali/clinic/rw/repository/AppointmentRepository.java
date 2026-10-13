@@ -22,6 +22,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     List<Appointment> findByStatusOrderByAppointmentDateAsc(AppointmentStatus status);
     List<Appointment> findByAppointmentDateBetweenOrderByAppointmentDateAsc(LocalDate start, LocalDate end);
     boolean existsByDoctorIdAndAppointmentDateAndStatusNot(UUID doctorId, LocalDate date, AppointmentStatus status);
+    boolean existsByDoctorIdAndAppointmentDateAndStatusNotAndIdNot(UUID doctorId, LocalDate date, AppointmentStatus status, UUID id);
 
     @Query("SELECT a FROM Appointment a WHERE a.status = 'PENDING' AND a.appointmentDate < :today")
     List<Appointment> findPendingAppointmentsBeforeDate(LocalDate today);

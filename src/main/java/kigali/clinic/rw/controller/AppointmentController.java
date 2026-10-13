@@ -14,7 +14,7 @@ import kigali.clinic.rw.domain.AppointmentStatus;
 import kigali.clinic.rw.service.AppointmentService;
 
 @RestController
-@RequestMapping(value = "/api/appointment")
+@RequestMapping(value = {"/api/appointment", "/api/appointments"})
 public class AppointmentController {
 
     @Autowired
@@ -33,10 +33,13 @@ public class AppointmentController {
     @PostMapping(value = "/save")
     public ResponseEntity<?> saveAppointment(@RequestBody Appointment appointment) {
         String message = appointmentService.saveAppointment(appointment);
-        if (message.equals("Doctor is already booked on that date")) {
+        if (message.equals("Appointment date cannot be in the past")) {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        } else if (message.equals("Doctor is already booked on that date")) {
             return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.OK);
         }
-        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping(value = "/all")
@@ -112,6 +115,32 @@ public class AppointmentController {
     public ResponseEntity<?> deleteCancelledBefore(@RequestParam String date) {
         String message = appointmentService.deleteCancelledBefore(LocalDate.parse(date));
         return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/{id}/status")
+    public ResponseEntity<?> updateStatus(@PathVariable UUID id, @RequestParam AppointmentStatus status) {
+        String message = appointmentService.updateStatus(id, status);
+        if (message.equals("Appointment status updated successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("The appointment with that id does not exist")) {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping(value = "/{id}/reschedule")
+    public ResponseEntity<?> rescheduleAppointment(@PathVariable UUID id, @RequestParam String newDate) {
+        String message = appointmentService.rescheduleAppointment(id, LocalDate.parse(newDate));
+        if (message.equals("Appointment rescheduled successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("The appointment with that id does not exist")) {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        } else if (message.equals("Doctor is already booked on that date")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(value = "/update/{id}")
