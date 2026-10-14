@@ -12,27 +12,27 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table (name = "prescription")
+@Table (name="prescription")
 public class Prescription {
 
     @Id
     @GeneratedValue (strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column (name = "medicine_name")
+    @Column (name="medicine_name")
     private String medicineName;
 
-    @Column (name = "dosage")
+    @Column (name="dosage")
     private String dosage;
 
-    @Column (name = "duration_days")
+    @Column (name="duration_days")
     private int durationDays;
 
-    @Column (name = "issued_date")
+    @Column (name="issued_date")
     private LocalDate issuedDate;
 
     @ManyToOne
-    @JoinColumn (name = "appointment_id")
+    @JoinColumn (name="appointment_id")
     private Appointment appointment;
 
     public UUID getId() {
@@ -46,7 +46,7 @@ public class Prescription {
     public void setMedicineName(String medicineName) {
         this.medicineName = medicineName;
     }
-
+    
     public String getDosage() {
         return dosage;
     }

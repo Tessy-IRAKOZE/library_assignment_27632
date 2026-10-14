@@ -28,7 +28,7 @@ public class Patient {
     @Column (name="last_name")
     private String lastName;
 
-    @Column(name = "ss_number", unique = true)
+    @Column (name="ss_number", unique = true)
     private String ssNumber;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

@@ -46,8 +46,8 @@ public class Doctor {
     @ManyToMany
     @JoinTable (
         name = "doctor_specialization",
-        joinColumns = @JoinColumn (name = "doctor_id"),
-        inverseJoinColumns = @JoinColumn (name = "specialization_id")
+        joinColumns = @JoinColumn (name="doctor_id"),
+        inverseJoinColumns = @JoinColumn (name="specialization_id")
     )
     private List<Specialization> specializations = new ArrayList<>();
 
