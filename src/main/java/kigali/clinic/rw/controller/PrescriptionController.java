@@ -57,6 +57,11 @@ public class PrescriptionController {
         }
     }
 
+    @GetMapping(value = "/stats/top-medicines")
+    public ResponseEntity<List<Object[]>> findTopMedicines() {
+        return new ResponseEntity<>(prescriptionService.findTopMedicines(), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/patient/{ssNumber}")
     public ResponseEntity<List<Prescription>> findByPatientSsNumber(@PathVariable String ssNumber) {
         return new ResponseEntity<>(prescriptionService.findByPatientSsNumber(ssNumber), HttpStatus.OK);

@@ -104,6 +104,10 @@ public class DoctorService {
         return doctorRepo.searchByName(name);
     }
 
+    public List<Object[]> findWorkload(LocalDate start, LocalDate end) {
+        return appointmentRepo.findDoctorWorkload(start, end);
+    }
+
     public String changeOffice(UUID doctorId, int officeNumber) {
         Optional<Doctor> foundDoctor = doctorRepo.findById(doctorId);
         if (foundDoctor.isEmpty()) {

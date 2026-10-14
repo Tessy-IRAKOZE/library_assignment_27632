@@ -49,6 +49,10 @@ public class PrescriptionService {
         return prescriptionRepo.findByPatientSsNumber(ssNumber);
     }
 
+    public List<Object[]> findTopMedicines() {
+        return prescriptionRepo.findTopMedicines();
+    }
+
     public String updatePrescription(UUID id, Prescription updatedPrescription) {
         Optional<Prescription> existing = prescriptionRepo.findById(id);
         if (existing.isEmpty()) {

@@ -34,6 +34,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     @Query("SELECT a.doctor.firstName, a.doctor.lastName, COUNT(a) FROM Appointment a GROUP BY a.doctor ORDER BY COUNT(a) DESC")
     List<Object[]> countAppointmentsPerDoctor();
 
+    @Query("SELECT d.firstName, d.lastName, COUNT(a) FROM Appointment a JOIN a.doctor d WHERE a.status = 'COMPLETED' AND a.appointmentDate BETWEEN :start AND :end GROUP BY d ORDER BY COUNT(a) DESC")
+    List<Object[]> findDoctorWorkload(LocalDate start, LocalDate end);
+
     @Query("SELECT a.status, COUNT(a) FROM Appointment a GROUP BY a.status")
     List<Object[]> countAppointmentsByStatus();
 

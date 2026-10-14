@@ -83,6 +83,11 @@ public class DoctorController {
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/workload")
+    public ResponseEntity<List<Object[]>> findWorkload(@RequestParam String start, @RequestParam String end) {
+        return new ResponseEntity<>(doctorService.findWorkload(LocalDate.parse(start), LocalDate.parse(end)), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/search")
     public ResponseEntity<List<Doctor>> searchByName(@RequestParam String name) {
         return new ResponseEntity<>(doctorService.searchByName(name), HttpStatus.OK);
