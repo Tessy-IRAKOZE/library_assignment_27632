@@ -67,8 +67,8 @@ public class SpecializationService {
         if (doctors.contains(doctor.get())) {
             return "Doctor already assigned to this specialization";
         }
-        doctors.add(doctor.get());
-        specializationRepo.save(specialization.get());
+        doctor.get().getSpecializations().add(specialization.get());
+        doctorRepo.save(doctor.get());
         return "Doctor assigned to specialization successfully";
     }
 

@@ -11,7 +11,7 @@ import kigali.clinic.rw.domain.Office;
 import kigali.clinic.rw.service.OfficeService;
 
 @RestController
-@RequestMapping(value = "/api/office")
+@RequestMapping(value = {"/api/office", "/api/offices"})
 public class OfficeController {
 
     @Autowired
@@ -25,6 +25,11 @@ public class OfficeController {
         } else {
             return new ResponseEntity<>(returnedMessage, HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping(value = "/free")
+    public ResponseEntity<List<Office>> findFreeOffices() {
+        return new ResponseEntity<>(offServe.findFreeOffices(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/busiest")

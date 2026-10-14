@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -42,7 +43,12 @@ public class Doctor {
     private Office office;
 
     @JsonIgnore
-    @ManyToMany (mappedBy = "doctors")
+    @ManyToMany
+    @JoinTable (
+        name = "doctor_specialization",
+        joinColumns = @JoinColumn (name = "doctor_id"),
+        inverseJoinColumns = @JoinColumn (name = "specialization_id")
+    )
     private List<Specialization> specializations = new ArrayList<>();
 
     @JsonIgnore

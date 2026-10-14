@@ -11,7 +11,7 @@ import kigali.clinic.rw.domain.Doctor;
 import kigali.clinic.rw.service.DoctorService;
 
 @RestController
-@RequestMapping(value = "/api/doctor")
+@RequestMapping(value = {"/api/doctor", "/api/doctors"})
 public class DoctorController {
 
     @Autowired
@@ -45,6 +45,42 @@ public class DoctorController {
             return new ResponseEntity<>(doctor.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Doctor not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping(value = "/{doctorId}/specializations/{specializationId}")
+    public ResponseEntity<?> addSpecialization(@PathVariable UUID doctorId, @PathVariable UUID specializationId) {
+        String message = doctorService.addSpecialization(doctorId, specializationId);
+        if (message.equals("Specialization added to the doctor")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("The doctor already has that specialization")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(value = "/{doctorId}/specializations/{specializationId}")
+    public ResponseEntity<?> removeSpecialization(@PathVariable UUID doctorId, @PathVariable UUID specializationId) {
+        String message = doctorService.removeSpecialization(doctorId, specializationId);
+        if (message.equals("Specialization removed from the doctor")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("The doctor does not have that specialization")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PatchMapping(value = "/{doctorId}/office")
+    public ResponseEntity<?> changeOffice(@PathVariable UUID doctorId, @RequestParam int officeNumber) {
+        String message = doctorService.changeOffice(doctorId, officeNumber);
+        if (message.equals("Office changed successfully")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else if (message.equals("That office is taken by other doctor")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
     }
 

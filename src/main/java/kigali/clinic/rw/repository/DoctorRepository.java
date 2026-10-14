@@ -13,6 +13,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
     List<Doctor> findByFirstName(String firstName);
     List<Doctor> findByLastName(String lastName);
     Optional<Doctor> findByOfficeId(UUID officeId);
+    boolean existsByOfficeIdAndIdNot(UUID officeId, UUID id);
 
     @Query("SELECT d FROM Doctor d JOIN d.specializations s WHERE LOWER(s.name) = LOWER(:name)")
     List<Doctor> findBySpecializationName(String name);
