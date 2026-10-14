@@ -1,5 +1,6 @@
 package kigali.clinic.rw.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import kigali.clinic.rw.domain.Appointment;
 import kigali.clinic.rw.domain.Doctor;
 import kigali.clinic.rw.service.DoctorService;
 
@@ -70,6 +72,20 @@ public class DoctorController {
         } else {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(value = "/{doctorId}/agenda")
+    public ResponseEntity<?> findAgenda(@PathVariable UUID doctorId, @RequestParam String date) {
+        List<Appointment> appointments = doctorService.findAgenda(doctorId, LocalDate.parse(date));
+        if (appointments == null) {
+            return new ResponseEntity<>("The doctor with that id does not exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/search")
+    public ResponseEntity<List<Doctor>> searchByName(@RequestParam String name) {
+        return new ResponseEntity<>(doctorService.searchByName(name), HttpStatus.OK);
     }
 
     @PatchMapping(value = "/{doctorId}/office")

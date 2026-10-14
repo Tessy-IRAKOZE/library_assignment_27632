@@ -3,6 +3,7 @@ package kigali.clinic.rw.controller;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import kigali.clinic.rw.domain.Appointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import kigali.clinic.rw.domain.Patient;
 import kigali.clinic.rw.service.PatientService;
 
 @RestController
-@RequestMapping(value = "/api/patient")
+@RequestMapping(value = {"/api/patient", "/api/patients"})
 public class PatientController {
 
     @Autowired
@@ -45,6 +46,15 @@ public class PatientController {
     @GetMapping(value = "/all")
     public ResponseEntity<List<Patient>> findAll() {
         return new ResponseEntity<>(patientService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{ssNumber}/upcoming")
+    public ResponseEntity<?> findUpcoming(@PathVariable String ssNumber) {
+        List<Appointment> appointments = patientService.findUpcoming(ssNumber);
+        if (appointments == null) {
+            return new ResponseEntity<>("That patient with that ssnumber does not exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

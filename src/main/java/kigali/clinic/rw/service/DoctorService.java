@@ -1,14 +1,18 @@
 package kigali.clinic.rw.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import kigali.clinic.rw.domain.Appointment;
+import kigali.clinic.rw.domain.AppointmentStatus;
 import kigali.clinic.rw.domain.Doctor;
 import kigali.clinic.rw.domain.Office;
 import kigali.clinic.rw.domain.Specialization;
+import kigali.clinic.rw.repository.AppointmentRepository;
 import kigali.clinic.rw.repository.DoctorRepository;
 import kigali.clinic.rw.repository.OfficeRepository;
 import kigali.clinic.rw.repository.SpecializationRepository;
@@ -24,6 +28,9 @@ public class DoctorService {
 
     @Autowired
     private OfficeRepository officeRepo;
+
+    @Autowired
+    private AppointmentRepository appointmentRepo;
 
     public List<Doctor> findBySpecializationName(String name) {
         return doctorRepo.findBySpecializationName(name);
@@ -84,6 +91,17 @@ public class DoctorService {
         doctor.getSpecializations().remove(specialization);
         doctorRepo.save(doctor);
         return "Specialization removed from the doctor";
+    }
+
+    public List<Appointment> findAgenda(UUID doctorId, LocalDate date) {
+        if (!doctorRepo.existsById(doctorId)) {
+            return null;
+        }
+        return appointmentRepo.findByDoctorIdAndAppointmentDateAndStatusNot(doctorId, date, AppointmentStatus.CANCELLED);
+    }
+
+    public List<Doctor> searchByName(String name) {
+        return doctorRepo.searchByName(name);
     }
 
     public String changeOffice(UUID doctorId, int officeNumber) {

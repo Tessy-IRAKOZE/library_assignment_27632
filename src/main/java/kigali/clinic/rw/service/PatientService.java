@@ -1,11 +1,16 @@
 package kigali.clinic.rw.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import kigali.clinic.rw.domain.Appointment;
+import kigali.clinic.rw.domain.AppointmentStatus;
 import kigali.clinic.rw.domain.Patient;
+import kigali.clinic.rw.repository.AppointmentRepository;
 import kigali.clinic.rw.repository.DoctorRepository;
 import kigali.clinic.rw.repository.PatientRepository;
 
@@ -17,6 +22,9 @@ public class PatientService {
 
     @Autowired
     private DoctorRepository doctorRepo;
+
+    @Autowired
+    private AppointmentRepository appointmentRepo;
 
     public List<Patient> findByLastNameIgnoreCase(String lastName) {
         return patientRepo.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
@@ -31,6 +39,16 @@ public class PatientService {
 
     public List<Patient> findFrequentPatients(int min) {
         return patientRepo.findFrequentPatients(min);
+    }
+
+    public List<Appointment> findUpcoming(String ssNumber) {
+        if (!patientRepo.existsBySsNumber(ssNumber)) {
+            return null;
+        }
+        List<AppointmentStatus> statuses = new ArrayList<>();
+        statuses.add(AppointmentStatus.PENDING);
+        statuses.add(AppointmentStatus.CONFIRMED);
+        return appointmentRepo.findByPatientSsNumberAndAppointmentDateGreaterThanEqualAndStatusInOrderByAppointmentDateAsc(ssNumber, LocalDate.now(), statuses);
     }
 
     public String savePatient(Patient patient) {
