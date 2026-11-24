@@ -55,4 +55,14 @@ public class OfficeService {
         offRepo.deleteById(id);
         return "Office deleted successfully";
     }
+    public String deleteOfficeByOfficeNumber(int officeNumber){
+        Optional<Office> getOffice = offRepo.findByOfficeNumber(officeNumber);
+        if(getOffice.isPresent()){
+            offRepo.delete(getOffice.get());
+            return "deleted";
+        }else{
+            return"not deleted";
+        }
+        
+    }
 }

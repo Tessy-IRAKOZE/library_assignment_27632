@@ -13,6 +13,8 @@ public interface OfficeRepository extends JpaRepository<Office, UUID> {
 
     List<Office> findByName(String name);
     Optional<Office> findByOfficeNumber(int officeN);
+    
+    
     List<Office> findByOfficeNumberStartsWith(int startNumber);
 
     @Query("SELECT o.name, o.officeNumber, COUNT(a) FROM Appointment a JOIN a.doctor d JOIN d.office o GROUP BY o.id, o.name, o.officeNumber ORDER BY COUNT(a) DESC")

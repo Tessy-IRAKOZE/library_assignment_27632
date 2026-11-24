@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import kigali.clinic.rw.domain.Office;
 import kigali.clinic.rw.service.OfficeService;
 
+
 @RestController
-@RequestMapping(value = {"/api/office", "/api/offices"})
+@RequestMapping(value ="/api/office")
+@CrossOrigin ("*")
 public class OfficeController {
 
     @Autowired
@@ -75,4 +77,17 @@ public class OfficeController {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
     }
+
+        @DeleteMapping(value = "/deleteByNumber/{officeNumber}")
+        public ResponseEntity<?> deleteOfficeByOfficeNumber(@PathVariable int officeNumber) {
+        String message = offServe.deleteOfficeByOfficeNumber(officeNumber);
+        if (message.equals("deleted")) {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
+
+
